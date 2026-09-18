@@ -1,4 +1,4 @@
-import { clamp, degToRad, radToDeg } from "@src/number";
+import { clamp, degToRad, radToDeg, randomFloat, randomInt } from "@src/number";
 import { describe, expect, it } from "bun:test";
 
 describe("clamp", () => {
@@ -25,5 +25,34 @@ describe("radToDeg", () => {
 		expect(radToDeg(Math.PI)).toBe(180);
 		expect(radToDeg(Math.PI / 2)).toBe(90);
 		expect(radToDeg(0)).toBe(0);
+	});
+});
+
+describe("randomInt", () => {
+	it("returns an integer within the inclusive range", () => {
+		for (let i = 0; i < 100; i++) {
+			const value = randomInt(1, 5);
+			expect(Number.isInteger(value)).toBe(true);
+			expect(value).toBeGreaterThanOrEqual(1);
+			expect(value).toBeLessThanOrEqual(5);
+		}
+	});
+
+	it("returns min when min equals max", () => {
+		expect(randomInt(3, 3)).toBe(3);
+	});
+});
+
+describe("randomFloat", () => {
+	it("returns a float within the range [min, max)", () => {
+		for (let i = 0; i < 100; i++) {
+			const value = randomFloat(1, 5);
+			expect(value).toBeGreaterThanOrEqual(1);
+			expect(value).toBeLessThan(5);
+		}
+	});
+
+	it("returns min when min equals max", () => {
+		expect(randomFloat(3, 3)).toBe(3);
 	});
 });
