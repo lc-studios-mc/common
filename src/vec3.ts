@@ -159,3 +159,20 @@ export function distanceSq(v1: Vector3, v2: Vector3): number {
 export function distance(v1: Vector3, v2: Vector3): number {
 	return Math.sqrt(distanceSq(v1, v2));
 }
+
+/**
+ * Normalizes a vector to a length of 1.
+ * @param out - Vector to write the result to.
+ * @param v - Vector to normalize. A zero-length vector results in a zero vector.
+ * @returns The mutated `out`.
+ */
+export function normalize(out: Vector3, v: Vector3): Vector3 {
+	const len = length(v);
+	if (len === 0) {
+		out.x = 0;
+		out.y = 0;
+		out.z = 0;
+		return out;
+	}
+	return divideScalar(out, v, len);
+}

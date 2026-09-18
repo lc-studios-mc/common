@@ -173,3 +173,22 @@ describe("distance", () => {
 		expect(Vec3.distance({ x: 1, y: 2, z: 3 }, { x: 1, y: 2, z: 3 })).toBe(0);
 	});
 });
+
+describe("normalize", () => {
+	it("scales a vector to a length of 1", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.normalize(out, { x: 0, y: 3, z: 4 })).toEqual({ x: 0, y: 0.6, z: 0.8 });
+		expect(Vec3.length(out)).toBeCloseTo(1);
+	});
+
+	it("returns a zero vector for a zero-length vector", () => {
+		const out = { x: 1, y: 2, z: 3 };
+		expect(Vec3.normalize(out, { x: 0, y: 0, z: 0 })).toEqual({ x: 0, y: 0, z: 0 });
+	});
+
+	it("writes the result to and returns out", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		const result = Vec3.normalize(out, { x: 0, y: 3, z: 4 });
+		expect(result).toBe(out);
+	});
+});
