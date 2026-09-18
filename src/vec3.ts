@@ -1,4 +1,5 @@
 import { Vector3 } from "@minecraft/server";
+import { clamp as clampNumber } from "./number";
 
 export const ZERO = { x: 0, y: 0, z: 0 } as const satisfies Vector3;
 
@@ -240,5 +241,27 @@ export function round(out: Vector3, v: Vector3): Vector3 {
 	out.x = Math.round(v.x);
 	out.y = Math.round(v.y);
 	out.z = Math.round(v.z);
+	return out;
+}
+
+/**
+ * Clamps each component of a vector between a minimum and maximum.
+ * @param out - Vector to write the result to.
+ * @param v - Vector to clamp.
+ * @param min - Minimum value, either a number applied to all components or a per-component vector.
+ * @param max - Maximum value, either a number applied to all components or a per-component vector.
+ * @returns The mutated `out`.
+ */
+export function clamp(
+	out: Vector3,
+	v: Vector3,
+	min: number | Vector3,
+	max: number | Vector3,
+): Vector3 {
+	const minIsNum = typeof min === "number";
+	const maxIsNum = typeof max === "number";
+	out.x = clampNumber(v.x, minIsNum ? min : min.x, maxIsNum ? max : max.x);
+	out.y = clampNumber(v.y, minIsNum ? min : min.y, maxIsNum ? max : max.y);
+	out.z = clampNumber(v.z, minIsNum ? min : min.z, maxIsNum ? max : max.z);
 	return out;
 }

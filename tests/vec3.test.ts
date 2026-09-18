@@ -273,3 +273,35 @@ describe("round", () => {
 		expect(Vec3.round(out, { x: 1.5, y: 2.5, z: 3.5 })).toBe(out);
 	});
 });
+
+describe("clamp", () => {
+	it("clamps each component between scalar bounds", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.clamp(out, { x: -5, y: 5, z: 15 }, 0, 10)).toEqual({ x: 0, y: 5, z: 10 });
+	});
+
+	it("clamps each component between vector bounds", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		const result = Vec3.clamp(
+			out,
+			{ x: 0, y: 20, z: 5 },
+			{ x: 1, y: 2, z: 3 },
+			{ x: 4, y: 10, z: 6 },
+		);
+		expect(result).toEqual({ x: 1, y: 10, z: 5 });
+	});
+
+	it("accepts a scalar min with a vector max", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.clamp(out, { x: -5, y: 5, z: 5 }, 0, { x: 10, y: 2, z: 10 })).toEqual({
+			x: 0,
+			y: 2,
+			z: 5,
+		});
+	});
+
+	it("writes the result to and returns out", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.clamp(out, { x: 1, y: 2, z: 3 }, 0, 10)).toBe(out);
+	});
+});
