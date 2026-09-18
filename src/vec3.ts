@@ -272,6 +272,21 @@ export function setDirection(out: Vector3, v: Vector3, direction: Vector3): Vect
 }
 
 /**
+ * Changes a vector's length while preserving its direction.
+ * @param out - Vector to write the result to.
+ * @param v - Vector whose direction to keep. A zero-length vector results in a zero vector.
+ * @param newLength - Length to give the vector. A negative value flips the direction.
+ * @returns The mutated `out`.
+ */
+export function setLength(out: Vector3, v: Vector3, newLength: number): Vector3 {
+	const len = length(v);
+	if (len === 0) {
+		return set(out, 0, 0, 0);
+	}
+	return multiplyScalar(out, v, newLength / len);
+}
+
+/**
  * Rounds each component of a vector down to the nearest integer.
  * @param out - Vector to write the result to.
  * @param v - Vector to round.

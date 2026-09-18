@@ -342,6 +342,27 @@ describe("setDirection", () => {
 	});
 });
 
+describe("setLength", () => {
+	it("changes the length while keeping the direction", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		Vec3.setLength(out, { x: 0, y: 3, z: 4 }, 10);
+		expect(out.x).toBeCloseTo(0);
+		expect(out.y).toBeCloseTo(6);
+		expect(out.z).toBeCloseTo(8);
+	});
+
+	it("returns a zero vector for a zero-length vector", () => {
+		const out = { x: 1, y: 2, z: 3 };
+		expect(Vec3.setLength(out, { x: 0, y: 0, z: 0 }, 5)).toEqual({ x: 0, y: 0, z: 0 });
+	});
+
+	it("writes the result to and returns out, even if out is v", () => {
+		const v = { x: 0, y: 3, z: 4 };
+		expect(Vec3.setLength(v, v, 10)).toBe(v);
+		expect(Vec3.length(v)).toBeCloseTo(10);
+	});
+});
+
 describe("floor", () => {
 	it("rounds each component down", () => {
 		const out = { x: 0, y: 0, z: 0 };
