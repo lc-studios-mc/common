@@ -265,3 +265,18 @@ export function clamp(
 	out.z = clampNumber(v.z, minIsNum ? min : min.z, maxIsNum ? max : max.z);
 	return out;
 }
+
+/**
+ * Linearly interpolates between two vectors.
+ * @param out - Vector to write the result to.
+ * @param v1 - Start vector, returned when `t` is 0.
+ * @param v2 - End vector, returned when `t` is 1.
+ * @param t - Interpolation factor.
+ * @returns The mutated `out`.
+ */
+export function lerp(out: Vector3, v1: Vector3, v2: Vector3, t: number): Vector3 {
+	out.x = v1.x + (v2.x - v1.x) * t;
+	out.y = v1.y + (v2.y - v1.y) * t;
+	out.z = v1.z + (v2.z - v1.z) * t;
+	return out;
+}

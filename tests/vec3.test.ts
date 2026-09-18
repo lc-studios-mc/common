@@ -1,3 +1,4 @@
+import type { Vector3 } from "@minecraft/server";
 import { Vec3 } from "@src/index";
 import { describe, expect, it } from "bun:test";
 
@@ -303,5 +304,44 @@ describe("clamp", () => {
 	it("writes the result to and returns out", () => {
 		const out = { x: 0, y: 0, z: 0 };
 		expect(Vec3.clamp(out, { x: 1, y: 2, z: 3 }, 0, 10)).toBe(out);
+	});
+});
+
+describe("lerp", () => {
+	it("returns the endpoints at t = 0 and t = 1", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		const a = { x: 1, y: 2, z: 3 };
+		const b = { x: 5, y: 10, z: -3 };
+		expect(Vec3.lerp(out, a, b, 0)).toEqual(a);
+		expect(Vec3.lerp(out, a, b, 1)).toEqual(b);
+	});
+
+	it("interpolates linearly", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.lerp(out, { x: 0, y: 0, z: 0 }, { x: 10, y: 20, z: -30 }, 0.5)).toEqual({
+			x: 5,
+			y: 10,
+			z: -15,
+		});
+	});
+
+	it("extrapolates outside [0, 1]", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.lerp(out, { x: 0, y: 0, z: 0 }, { x: 1, y: 2, z: 3 }, 2)).toEqual({
+			x: 2,
+			y: 4,
+			z: 6,
+		});
+	});
+
+	it("writes the result to and returns out", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.lerp(out, { x: 0, y: 0, z: 0 }, { x: 1, y: 1, z: 1 }, 0.5)).toBe(out);
+	});
+
+	it("supports out aliasing an input", () => {
+		const a = { x: 0, y: 0, z: 0 };
+		Vec3.lerp(a, a, { x: 2, y: 4, z: 6 }, 0.5);
+		expect(a).toEqual({ x: 1, y: 2, z: 3 });
 	});
 });
