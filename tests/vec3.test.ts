@@ -175,6 +175,24 @@ describe("distance", () => {
 	});
 });
 
+describe("angle", () => {
+	it("returns PI / 2 for perpendicular vectors", () => {
+		expect(Vec3.angle({ x: 1, y: 0, z: 0 }, { x: 0, y: 1, z: 0 })).toBeCloseTo(Math.PI / 2);
+	});
+
+	it("returns 0 for parallel vectors regardless of length", () => {
+		expect(Vec3.angle({ x: 1, y: 2, z: 3 }, { x: 2, y: 4, z: 6 })).toBe(0);
+	});
+
+	it("returns PI for opposite vectors", () => {
+		expect(Vec3.angle({ x: 1, y: 0, z: 0 }, { x: -3, y: 0, z: 0 })).toBeCloseTo(Math.PI);
+	});
+
+	it("returns 0 if either vector is zero", () => {
+		expect(Vec3.angle({ x: 0, y: 0, z: 0 }, { x: 1, y: 0, z: 0 })).toBe(0);
+	});
+});
+
 describe("dot", () => {
 	it("returns the dot product of two vectors", () => {
 		expect(Vec3.dot({ x: 1, y: 2, z: 3 }, { x: 4, y: -5, z: 6 })).toBe(12);

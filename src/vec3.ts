@@ -162,6 +162,18 @@ export function distance(v1: Vector3, v2: Vector3): number {
 }
 
 /**
+ * Calculates the angle between two vectors.
+ * @param v1 - First vector.
+ * @param v2 - Second vector.
+ * @returns The angle in radians, in the range [0, π]. Returns 0 if either vector has zero length.
+ */
+export function angle(v1: Vector3, v2: Vector3): number {
+	const denom = Math.sqrt(lengthSq(v1) * lengthSq(v2));
+	if (denom === 0) return 0;
+	return Math.acos(clampNumber(dot(v1, v2) / denom, -1, 1));
+}
+
+/**
  * Calculates the dot product of two vectors.
  * @param v1 - First vector.
  * @param v2 - Second vector.
