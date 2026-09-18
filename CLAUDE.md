@@ -34,3 +34,4 @@ Utilities for Minecraft Bedrock scripting with `@minecraft/server` API.
 ## Notes
 
 - Bun only — no `node` or `npm` commands.
+- This is for Minecraft scripting — follow Minecraft conventions in math.
