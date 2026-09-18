@@ -237,3 +237,39 @@ describe("normalize", () => {
 		expect(result).toBe(out);
 	});
 });
+
+describe("floor", () => {
+	it("rounds each component down", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.floor(out, { x: 1.7, y: -1.2, z: 3 })).toEqual({ x: 1, y: -2, z: 3 });
+	});
+
+	it("writes the result to and returns out", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.floor(out, { x: 1.5, y: 2.5, z: 3.5 })).toBe(out);
+	});
+});
+
+describe("ceil", () => {
+	it("rounds each component up", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.ceil(out, { x: 1.2, y: -1.7, z: 3 })).toEqual({ x: 2, y: -1, z: 3 });
+	});
+
+	it("writes the result to and returns out", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.ceil(out, { x: 1.5, y: 2.5, z: 3.5 })).toBe(out);
+	});
+});
+
+describe("round", () => {
+	it("rounds each component to the nearest integer", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.round(out, { x: 1.4, y: 1.6, z: -2.4 })).toEqual({ x: 1, y: 2, z: -2 });
+	});
+
+	it("writes the result to and returns out", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.round(out, { x: 1.5, y: 2.5, z: 3.5 })).toBe(out);
+	});
+});

@@ -203,3 +203,42 @@ export function normalize(out: Vector3, v: Vector3): Vector3 {
 	}
 	return divideScalar(out, v, len);
 }
+
+/**
+ * Rounds each component of a vector down to the nearest integer.
+ * @param out - Vector to write the result to.
+ * @param v - Vector to round.
+ * @returns The mutated `out`.
+ */
+export function floor(out: Vector3, v: Vector3): Vector3 {
+	out.x = Math.floor(v.x);
+	out.y = Math.floor(v.y);
+	out.z = Math.floor(v.z);
+	return out;
+}
+
+/**
+ * Rounds each component of a vector up to the nearest integer.
+ * @param out - Vector to write the result to.
+ * @param v - Vector to round.
+ * @returns The mutated `out`.
+ */
+export function ceil(out: Vector3, v: Vector3): Vector3 {
+	out.x = Math.ceil(v.x);
+	out.y = Math.ceil(v.y);
+	out.z = Math.ceil(v.z);
+	return out;
+}
+
+/**
+ * Rounds each component of a vector to the nearest integer.
+ * @param out - Vector to write the result to.
+ * @param v - Vector to round.
+ * @returns The mutated `out`.
+ */
+export function round(out: Vector3, v: Vector3): Vector3 {
+	out.x = Math.round(v.x);
+	out.y = Math.round(v.y);
+	out.z = Math.round(v.z);
+	return out;
+}
