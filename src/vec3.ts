@@ -37,6 +37,21 @@ export function create(v?: Partial<Vector3>): Vector3 {
 }
 
 /**
+ * Sets the components of a vector.
+ * @param out - Vector to write the result to.
+ * @param x - X component.
+ * @param y - Y component.
+ * @param z - Z component.
+ * @returns The mutated `out`.
+ */
+export function set(out: Vector3, x: number, y: number, z: number): Vector3 {
+	out.x = x;
+	out.y = y;
+	out.z = z;
+	return out;
+}
+
+/**
  * Adds two vectors.
  * @param out - Vector to write the result to.
  * @param v1 - Vector to add to.
@@ -298,12 +313,6 @@ const scrSlerpScaled2 = create();
 const scrSlerpAxis = create();
 
 const SLERP_EPSILON = 1e-6;
-
-function set(out: Vector3, x: number, y: number, z: number): void {
-	out.x = x;
-	out.y = y;
-	out.z = z;
-}
 
 /**
  * Spherically interpolates between two unit vectors, rotating at constant angular speed.

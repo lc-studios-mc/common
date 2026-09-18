@@ -13,6 +13,19 @@ describe("create", () => {
 	});
 });
 
+describe("set", () => {
+	it("sets the components of out", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		Vec3.set(out, 1, 2, 3);
+		expect(out).toEqual({ x: 1, y: 2, z: 3 });
+	});
+
+	it("returns out", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.set(out, 1, 2, 3)).toBe(out);
+	});
+});
+
 describe("add", () => {
 	it("adds two vectors component-wise", () => {
 		const out = { x: 0, y: 0, z: 0 };
