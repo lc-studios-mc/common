@@ -138,6 +138,33 @@ export function negate(out: Vector3, v: Vector3): Vector3 {
 }
 
 /**
+ * Checks whether two vectors are strictly equal, comparing each component with `===`.
+ * @param v1 - First vector.
+ * @param v2 - Second vector.
+ * @returns `true` if all components are identical.
+ */
+export function equals(v1: Vector3, v2: Vector3): boolean {
+	return v1.x === v2.x && v1.y === v2.y && v1.z === v2.z;
+}
+
+const APPROX_EQUALS_EPSILON = 1e-6;
+
+/**
+ * Checks whether two vectors are approximately equal, comparing each component within a tolerance.
+ * @param v1 - First vector.
+ * @param v2 - Second vector.
+ * @param epsilon - Maximum allowed absolute difference per component (inclusive).
+ * @returns `true` if every component differs by at most `epsilon`.
+ */
+export function approxEquals(v1: Vector3, v2: Vector3, epsilon = APPROX_EQUALS_EPSILON): boolean {
+	return (
+		Math.abs(v1.x - v2.x) <= epsilon &&
+		Math.abs(v1.y - v2.y) <= epsilon &&
+		Math.abs(v1.z - v2.z) <= epsilon
+	);
+}
+
+/**
  * Calculates the squared length (magnitude) of a vector.
  * @param v - Vector to measure.
  * @returns The squared length.

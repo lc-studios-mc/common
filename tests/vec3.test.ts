@@ -173,6 +173,22 @@ describe("negate", () => {
 	});
 });
 
+describe("equals", () => {
+	it("compares components strictly", () => {
+		expect(Vec3.equals({ x: 1, y: 2, z: 3 }, { x: 1, y: 2, z: 3 })).toBe(true);
+		expect(Vec3.equals({ x: 1, y: 2, z: 3 }, { x: 1 + 1e-12, y: 2, z: 3 })).toBe(false);
+	});
+});
+
+describe("approxEquals", () => {
+	it("compares components within epsilon", () => {
+		const a = { x: 1, y: 2, z: 3 };
+		expect(Vec3.approxEquals(a, { x: 1 + 1e-7, y: 2, z: 3 })).toBe(true);
+		expect(Vec3.approxEquals(a, { x: 1, y: 2, z: 3.001 })).toBe(false);
+		expect(Vec3.approxEquals(a, { x: 1.05, y: 2, z: 3 }, 0.1)).toBe(true);
+	});
+});
+
 describe("lengthSq", () => {
 	it("returns the squared length of a vector", () => {
 		expect(Vec3.lengthSq({ x: 1, y: 2, z: 2 })).toBe(9);
