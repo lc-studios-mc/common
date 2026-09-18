@@ -1,14 +1,14 @@
-import { clamp, degToRad, radToDeg, randomFloat, randomInt } from "@src/number";
+import { clampNumber, degToRad, radToDeg, randomFloat, randomInt } from "@src/number";
 import { describe, expect, it } from "bun:test";
 
-describe("clamp", () => {
+describe("clampNumber", () => {
 	it("returns value when within range", () => {
-		expect(clamp(5, 0, 10)).toBe(5);
+		expect(clampNumber(5, 0, 10)).toBe(5);
 	});
 
 	it("clamps to min or max when outside range", () => {
-		expect(clamp(-5, 0, 10)).toBe(0);
-		expect(clamp(15, 0, 10)).toBe(10);
+		expect(clampNumber(-5, 0, 10)).toBe(0);
+		expect(clampNumber(15, 0, 10)).toBe(10);
 	});
 });
 
