@@ -136,3 +136,26 @@ export function lengthSq(v: Vector3): number {
 export function length(v: Vector3): number {
 	return Math.sqrt(lengthSq(v));
 }
+
+/**
+ * Calculates the squared distance between two vectors.
+ * @param v1 - First vector.
+ * @param v2 - Second vector.
+ * @returns The squared distance.
+ */
+export function distanceSq(v1: Vector3, v2: Vector3): number {
+	const dx = v1.x - v2.x;
+	const dy = v1.y - v2.y;
+	const dz = v1.z - v2.z;
+	return dx * dx + dy * dy + dz * dz;
+}
+
+/**
+ * Calculates the distance between two vectors.
+ * @param v1 - First vector.
+ * @param v2 - Second vector.
+ * @returns The distance.
+ */
+export function distance(v1: Vector3, v2: Vector3): number {
+	return Math.sqrt(distanceSq(v1, v2));
+}

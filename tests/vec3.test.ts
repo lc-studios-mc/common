@@ -146,3 +146,30 @@ describe("length", () => {
 		expect(Vec3.length({ x: 0, y: 0, z: 0 })).toBe(0);
 	});
 });
+
+describe("distanceSq", () => {
+	it("returns the squared distance between two vectors", () => {
+		expect(Vec3.distanceSq({ x: 1, y: 2, z: 3 }, { x: 2, y: 4, z: 5 })).toBe(9);
+	});
+
+	it("returns 0 for identical vectors", () => {
+		expect(Vec3.distanceSq({ x: 1, y: 2, z: 3 }, { x: 1, y: 2, z: 3 })).toBe(0);
+	});
+});
+
+describe("distance", () => {
+	it("returns the distance between two vectors", () => {
+		expect(Vec3.distance({ x: 1, y: 2, z: 3 }, { x: 2, y: 4, z: 5 })).toBe(3);
+		expect(Vec3.distance({ x: 0, y: 0, z: 0 }, { x: 3, y: 4, z: 0 })).toBe(5);
+	});
+
+	it("is symmetric", () => {
+		const a = { x: 1, y: 2, z: 3 };
+		const b = { x: -4, y: 6, z: 0 };
+		expect(Vec3.distance(a, b)).toBe(Vec3.distance(b, a));
+	});
+
+	it("returns 0 for identical vectors", () => {
+		expect(Vec3.distance({ x: 1, y: 2, z: 3 }, { x: 1, y: 2, z: 3 })).toBe(0);
+	});
+});
