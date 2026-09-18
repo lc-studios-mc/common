@@ -25,3 +25,12 @@ export const BACK = NORTH;
 export const RIGHT = EAST;
 
 export const LEFT = WEST;
+
+/**
+ * Creates a new `Vector3` object.
+ * @param v - Components to use; missing ones default to `0`.
+ * @returns A new vector.
+ */
+export function create(v?: Partial<Vector3>): Vector3 {
+	return { x: v?.x ?? 0, y: v?.y ?? 0, z: v?.z ?? 0 };
+}
