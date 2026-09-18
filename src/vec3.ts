@@ -258,6 +258,20 @@ export function normalize(out: Vector3, v: Vector3): Vector3 {
 }
 
 /**
+ * Changes a vector's direction while preserving its length.
+ * @param out - Vector to write the result to.
+ * @param v - Vector whose length to keep.
+ * @param direction - Direction to point towards; it does not need to be normalized. A zero-length
+ *   direction results in a zero vector.
+ * @returns The mutated `out`.
+ */
+export function setDirection(out: Vector3, v: Vector3, direction: Vector3): Vector3 {
+	const len = length(v);
+	normalize(out, direction);
+	return multiplyScalar(out, out, len);
+}
+
+/**
  * Rounds each component of a vector down to the nearest integer.
  * @param out - Vector to write the result to.
  * @param v - Vector to round.

@@ -319,6 +319,29 @@ describe("normalize", () => {
 	});
 });
 
+describe("setDirection", () => {
+	it("points towards the direction while keeping the length", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		// The direction is deliberately not normalized
+		Vec3.setDirection(out, { x: 0, y: 3, z: 4 }, { x: 10, y: 0, z: 0 });
+		expect(out.x).toBeCloseTo(5);
+		expect(out.y).toBeCloseTo(0);
+		expect(out.z).toBeCloseTo(0);
+	});
+
+	it("returns a zero vector if the vector or the direction has zero length", () => {
+		const zero = { x: 0, y: 0, z: 0 };
+		expect(Vec3.setDirection({ x: 1, y: 2, z: 3 }, { x: 0, y: 3, z: 4 }, zero)).toEqual(zero);
+		expect(Vec3.setDirection({ x: 1, y: 2, z: 3 }, zero, { x: 1, y: 0, z: 0 })).toEqual(zero);
+	});
+
+	it("writes the result to and returns out, even if out is v", () => {
+		const v = { x: 0, y: 3, z: 4 };
+		expect(Vec3.setDirection(v, v, { x: 1, y: 0, z: 0 })).toBe(v);
+		expect(v.x).toBeCloseTo(5);
+	});
+});
+
 describe("floor", () => {
 	it("rounds each component down", () => {
 		const out = { x: 0, y: 0, z: 0 };
