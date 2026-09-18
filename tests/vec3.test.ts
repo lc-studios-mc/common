@@ -140,6 +140,25 @@ describe("divideScalar", () => {
 	});
 });
 
+describe("copy", () => {
+	it("copies each component into out", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.copy(out, { x: 1, y: -2, z: 3 })).toEqual({ x: 1, y: -2, z: 3 });
+	});
+
+	it("writes the result to and returns out", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		const result = Vec3.copy(out, { x: 1, y: 2, z: 3 });
+		expect(result).toBe(out);
+	});
+
+	it("does not modify the source vector", () => {
+		const v = { x: 1, y: 2, z: 3 };
+		Vec3.copy({ x: 0, y: 0, z: 0 }, v);
+		expect(v).toEqual({ x: 1, y: 2, z: 3 });
+	});
+});
+
 describe("negate", () => {
 	it("flips the sign of each component", () => {
 		const out = { x: 0, y: 0, z: 0 };

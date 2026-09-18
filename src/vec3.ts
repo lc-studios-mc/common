@@ -52,6 +52,16 @@ export function set(out: Vector3, x: number, y: number, z: number): Vector3 {
 }
 
 /**
+ * Copies the components of one vector into another.
+ * @param out - Vector to write the result to.
+ * @param v - Vector to copy.
+ * @returns The mutated `out`.
+ */
+export function copy(out: Vector3, v: Vector3): Vector3 {
+	return set(out, v.x, v.y, v.z);
+}
+
+/**
  * Adds two vectors.
  * @param out - Vector to write the result to.
  * @param v1 - Vector to add to.
