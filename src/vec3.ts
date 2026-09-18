@@ -292,3 +292,59 @@ export function lerp(out: Vector3, v1: Vector3, v2: Vector3, t: number): Vector3
 	out.z = v1.z + (v2.z - v1.z) * t;
 	return out;
 }
+
+const scrSlerpScaled1 = create();
+const scrSlerpScaled2 = create();
+const scrSlerpAxis = create();
+
+const SLERP_EPSILON = 1e-6;
+
+function set(out: Vector3, x: number, y: number, z: number): void {
+	out.x = x;
+	out.y = y;
+	out.z = z;
+}
+
+/**
+ * Spherically interpolates between two unit vectors, rotating at constant angular speed.
+ *
+ * Both inputs must be normalized; the result is not a valid spherical interpolation otherwise. If
+ * the vectors are opposite, the rotation plane is ambiguous, so an arbitrary one is used.
+ *
+ * @param out - Vector to write the result to.
+ * @param v1 - Start unit vector, returned when `t` is 0.
+ * @param v2 - End unit vector, returned when `t` is 1.
+ * @param t - Interpolation factor. Values outside [0, 1] continue along the same great circle.
+ * @returns The mutated `out`.
+ */
+export function slerp(out: Vector3, v1: Vector3, v2: Vector3, t: number): Vector3 {
+	const d = Math.min(1, Math.max(-1, dot(v1, v2)));
+	const theta = Math.acos(d);
+	const sinTheta = Math.sin(theta);
+
+	if (sinTheta < SLERP_EPSILON) {
+		// Nearly parallel: the arc is negligible, so lerp is accurate and avoids dividing by ~0
+		if (d > 0) return lerp(out, v1, v2, t);
+
+		// Opposite: any great circle through v1 is valid, so rotate towards an arbitrary perpendicular
+		const ax = Math.abs(v1.x);
+		const ay = Math.abs(v1.y);
+		const az = Math.abs(v1.z);
+		// Cross with the axis least aligned with v1 for a well-conditioned perpendicular
+		if (ax <= ay && ax <= az) set(scrSlerpAxis, 1, 0, 0);
+		else if (ay <= az) set(scrSlerpAxis, 0, 1, 0);
+		else set(scrSlerpAxis, 0, 0, 1);
+		cross(scrSlerpAxis, v1, scrSlerpAxis);
+		normalize(scrSlerpAxis, scrSlerpAxis);
+
+		multiplyScalar(scrSlerpScaled1, v1, Math.cos(t * Math.PI));
+		multiplyScalar(scrSlerpScaled2, scrSlerpAxis, Math.sin(t * Math.PI));
+		return add(out, scrSlerpScaled1, scrSlerpScaled2);
+	}
+
+	const t1 = Math.sin((1 - t) * theta) / sinTheta;
+	const t2 = Math.sin(t * theta) / sinTheta;
+	multiplyScalar(scrSlerpScaled1, v1, t1);
+	multiplyScalar(scrSlerpScaled2, v2, t2);
+	return add(out, scrSlerpScaled1, scrSlerpScaled2);
+}

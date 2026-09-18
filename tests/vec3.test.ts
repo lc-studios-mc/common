@@ -363,3 +363,99 @@ describe("lerp", () => {
 		expect(a).toEqual({ x: 1, y: 2, z: 3 });
 	});
 });
+
+describe("slerp", () => {
+	const x = { x: 1, y: 0, z: 0 };
+	const y = { x: 0, y: 1, z: 0 };
+
+	it("returns the endpoints at t = 0 and t = 1", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		const a = Vec3.normalize({ x: 0, y: 0, z: 0 }, { x: 1, y: 2, z: 3 });
+		const b = Vec3.normalize({ x: 0, y: 0, z: 0 }, { x: -2, y: 1, z: 4 });
+
+		Vec3.slerp(out, a, b, 0);
+		expect(out.x).toBeCloseTo(a.x);
+		expect(out.y).toBeCloseTo(a.y);
+		expect(out.z).toBeCloseTo(a.z);
+
+		Vec3.slerp(out, a, b, 1);
+		expect(out.x).toBeCloseTo(b.x);
+		expect(out.y).toBeCloseTo(b.y);
+		expect(out.z).toBeCloseTo(b.z);
+	});
+
+	it("interpolates along the arc at constant angular speed", () => {
+		const out = { x: 0, y: 0, z: 0 };
+
+		Vec3.slerp(out, x, y, 0.5);
+		expect(out.x).toBeCloseTo(Math.SQRT1_2);
+		expect(out.y).toBeCloseTo(Math.SQRT1_2);
+		expect(out.z).toBeCloseTo(0);
+
+		Vec3.slerp(out, x, y, 1 / 3);
+		expect(out.x).toBeCloseTo(Math.cos(Math.PI / 6));
+		expect(out.y).toBeCloseTo(Math.sin(Math.PI / 6));
+		expect(out.z).toBeCloseTo(0);
+	});
+
+	it("keeps the result unit length for unit inputs", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		const a = Vec3.normalize({ x: 0, y: 0, z: 0 }, { x: 1, y: 2, z: 3 });
+		const b = Vec3.normalize({ x: 0, y: 0, z: 0 }, { x: -2, y: 1, z: 4 });
+		for (const t of [0.1, 0.25, 0.5, 0.9]) {
+			Vec3.slerp(out, a, b, t);
+			expect(Vec3.length(out)).toBeCloseTo(1);
+		}
+	});
+
+	it("extrapolates along the same great circle outside [0, 1]", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		Vec3.slerp(out, x, y, 2);
+		expect(out.x).toBeCloseTo(-1);
+		expect(out.y).toBeCloseTo(0);
+		expect(out.z).toBeCloseTo(0);
+
+		Vec3.slerp(out, x, y, -1);
+		expect(out.x).toBeCloseTo(0);
+		expect(out.y).toBeCloseTo(-1);
+		expect(out.z).toBeCloseTo(0);
+	});
+
+	it("returns the vector itself when both inputs are identical", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		Vec3.slerp(out, y, y, 0.5);
+		expect(out.x).toBeCloseTo(0);
+		expect(out.y).toBeCloseTo(1);
+		expect(out.z).toBeCloseTo(0);
+	});
+
+	it("handles nearly parallel vectors without producing NaN", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		const b = Vec3.normalize({ x: 0, y: 0, z: 0 }, { x: 1, y: 1e-9, z: 0 });
+		Vec3.slerp(out, x, b, 0.5);
+		expect(Number.isNaN(out.x + out.y + out.z)).toBe(false);
+		expect(out.x).toBeCloseTo(1);
+	});
+
+	it("handles opposite vectors by producing a finite unit vector", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		Vec3.slerp(out, x, { x: -1, y: 0, z: 0 }, 0.5);
+		expect(Number.isFinite(out.x + out.y + out.z)).toBe(true);
+		expect(Vec3.length(out)).toBeCloseTo(1);
+		// Midpoint of a half-turn is perpendicular to both endpoints
+		expect(Vec3.dot(out, x)).toBeCloseTo(0);
+	});
+
+	it("writes the result to and returns out", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.slerp(out, x, y, 0.5)).toBe(out);
+	});
+
+	it("supports out aliasing an input", () => {
+		const a = { ...x };
+		Vec3.slerp(a, a, y, 0.5);
+		expect(a.x).toBeCloseTo(Math.SQRT1_2);
+		expect(a.y).toBeCloseTo(Math.SQRT1_2);
+		expect(a.z).toBeCloseTo(0);
+	});
+});
