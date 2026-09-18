@@ -303,6 +303,23 @@ export function project(out: Vector3, v: Vector3, onto: Vector3): Vector3 {
 }
 
 /**
+ * Reflects a vector off a surface.
+ * @param out - Vector to write the result to.
+ * @param v - Incident vector.
+ * @param normal - Surface normal; it does not need to be normalized. A zero-length normal leaves
+ *   the vector unchanged.
+ * @returns The mutated `out`.
+ */
+export function reflect(out: Vector3, v: Vector3, normal: Vector3): Vector3 {
+	const denom = lengthSq(normal);
+	if (denom === 0) {
+		return copy(out, v);
+	}
+	const k = (2 * dot(v, normal)) / denom;
+	return set(out, v.x - k * normal.x, v.y - k * normal.y, v.z - k * normal.z);
+}
+
+/**
  * Rounds each component of a vector down to the nearest integer.
  * @param out - Vector to write the result to.
  * @param v - Vector to round.

@@ -403,6 +403,48 @@ describe("project", () => {
 	});
 });
 
+describe("reflect", () => {
+	it("reflects off a surface", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.reflect(out, { x: 1, y: -1, z: 2 }, { x: 0, y: 1, z: 0 })).toEqual({
+			x: 1,
+			y: 1,
+			z: 2,
+		});
+	});
+
+	it("accepts a non-normalized normal", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.reflect(out, { x: 1, y: -1, z: 2 }, { x: 0, y: 5, z: 0 })).toEqual({
+			x: 1,
+			y: 1,
+			z: 2,
+		});
+	});
+
+	it("preserves length", () => {
+		const v = { x: 1, y: -2, z: 3 };
+		const out = { x: 0, y: 0, z: 0 };
+		Vec3.reflect(out, v, { x: 1, y: 1, z: 0 });
+		expect(Vec3.length(out)).toBeCloseTo(Vec3.length(v));
+	});
+
+	it("leaves the vector unchanged for a zero normal", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.reflect(out, { x: 1, y: 2, z: 3 }, { x: 0, y: 0, z: 0 })).toEqual({
+			x: 1,
+			y: 2,
+			z: 3,
+		});
+	});
+
+	it("writes the result to and returns out, even if out is v", () => {
+		const v = { x: 1, y: -1, z: 2 };
+		expect(Vec3.reflect(v, v, { x: 0, y: 1, z: 0 })).toBe(v);
+		expect(v).toEqual({ x: 1, y: 1, z: 2 });
+	});
+});
+
 describe("floor", () => {
 	it("rounds each component down", () => {
 		const out = { x: 0, y: 0, z: 0 };
