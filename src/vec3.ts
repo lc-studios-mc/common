@@ -59,10 +59,7 @@ export function set(out: Vector3, x: number, y: number, z: number): Vector3 {
  * @returns The mutated `out`.
  */
 export function add(out: Vector3, v1: Vector3, v2: Partial<Vector3>): Vector3 {
-	out.x = v1.x + (v2.x ?? 0);
-	out.y = v1.y + (v2.y ?? 0);
-	out.z = v1.z + (v2.z ?? 0);
-	return out;
+	return set(out, v1.x + (v2.x ?? 0), v1.y + (v2.y ?? 0), v1.z + (v2.z ?? 0));
 }
 
 /**
@@ -73,10 +70,7 @@ export function add(out: Vector3, v1: Vector3, v2: Partial<Vector3>): Vector3 {
  * @returns The mutated `out`.
  */
 export function subtract(out: Vector3, v1: Vector3, v2: Partial<Vector3>): Vector3 {
-	out.x = v1.x - (v2.x ?? 0);
-	out.y = v1.y - (v2.y ?? 0);
-	out.z = v1.z - (v2.z ?? 0);
-	return out;
+	return set(out, v1.x - (v2.x ?? 0), v1.y - (v2.y ?? 0), v1.z - (v2.z ?? 0));
 }
 
 /**
@@ -87,10 +81,7 @@ export function subtract(out: Vector3, v1: Vector3, v2: Partial<Vector3>): Vecto
  * @returns The mutated `out`.
  */
 export function multiply(out: Vector3, v1: Vector3, v2: Partial<Vector3>): Vector3 {
-	out.x = v1.x * (v2.x ?? 1);
-	out.y = v1.y * (v2.y ?? 1);
-	out.z = v1.z * (v2.z ?? 1);
-	return out;
+	return set(out, v1.x * (v2.x ?? 1), v1.y * (v2.y ?? 1), v1.z * (v2.z ?? 1));
 }
 
 /**
@@ -101,10 +92,7 @@ export function multiply(out: Vector3, v1: Vector3, v2: Partial<Vector3>): Vecto
  * @returns The mutated `out`.
  */
 export function multiplyScalar(out: Vector3, v: Vector3, scalar: number): Vector3 {
-	out.x = v.x * scalar;
-	out.y = v.y * scalar;
-	out.z = v.z * scalar;
-	return out;
+	return set(out, v.x * scalar, v.y * scalar, v.z * scalar);
 }
 
 /**
@@ -115,10 +103,7 @@ export function multiplyScalar(out: Vector3, v: Vector3, scalar: number): Vector
  * @returns The mutated `out`.
  */
 export function divide(out: Vector3, v1: Vector3, v2: Partial<Vector3>): Vector3 {
-	out.x = v1.x / (v2.x ?? 1);
-	out.y = v1.y / (v2.y ?? 1);
-	out.z = v1.z / (v2.z ?? 1);
-	return out;
+	return set(out, v1.x / (v2.x ?? 1), v1.y / (v2.y ?? 1), v1.z / (v2.z ?? 1));
 }
 
 /**
@@ -129,10 +114,7 @@ export function divide(out: Vector3, v1: Vector3, v2: Partial<Vector3>): Vector3
  * @returns The mutated `out`.
  */
 export function divideScalar(out: Vector3, v: Vector3, scalar: number): Vector3 {
-	out.x = v.x / scalar;
-	out.y = v.y / scalar;
-	out.z = v.z / scalar;
-	return out;
+	return set(out, v.x / scalar, v.y / scalar, v.z / scalar);
 }
 
 /**
@@ -206,13 +188,12 @@ export function dot(v1: Vector3, v2: Vector3): number {
  * @returns The mutated `out`.
  */
 export function cross(out: Vector3, v1: Vector3, v2: Vector3): Vector3 {
-	const x = v1.y * v2.z - v1.z * v2.y;
-	const y = v1.z * v2.x - v1.x * v2.z;
-	const z = v1.x * v2.y - v1.y * v2.x;
-	out.x = x;
-	out.y = y;
-	out.z = z;
-	return out;
+	return set(
+		out,
+		v1.y * v2.z - v1.z * v2.y,
+		v1.z * v2.x - v1.x * v2.z,
+		v1.x * v2.y - v1.y * v2.x,
+	);
 }
 
 /**
@@ -224,10 +205,7 @@ export function cross(out: Vector3, v1: Vector3, v2: Vector3): Vector3 {
 export function normalize(out: Vector3, v: Vector3): Vector3 {
 	const len = length(v);
 	if (len === 0) {
-		out.x = 0;
-		out.y = 0;
-		out.z = 0;
-		return out;
+		return set(out, 0, 0, 0);
 	}
 	return divideScalar(out, v, len);
 }
@@ -239,10 +217,7 @@ export function normalize(out: Vector3, v: Vector3): Vector3 {
  * @returns The mutated `out`.
  */
 export function floor(out: Vector3, v: Vector3): Vector3 {
-	out.x = Math.floor(v.x);
-	out.y = Math.floor(v.y);
-	out.z = Math.floor(v.z);
-	return out;
+	return set(out, Math.floor(v.x), Math.floor(v.y), Math.floor(v.z));
 }
 
 /**
@@ -252,10 +227,7 @@ export function floor(out: Vector3, v: Vector3): Vector3 {
  * @returns The mutated `out`.
  */
 export function ceil(out: Vector3, v: Vector3): Vector3 {
-	out.x = Math.ceil(v.x);
-	out.y = Math.ceil(v.y);
-	out.z = Math.ceil(v.z);
-	return out;
+	return set(out, Math.ceil(v.x), Math.ceil(v.y), Math.ceil(v.z));
 }
 
 /**
@@ -265,10 +237,7 @@ export function ceil(out: Vector3, v: Vector3): Vector3 {
  * @returns The mutated `out`.
  */
 export function round(out: Vector3, v: Vector3): Vector3 {
-	out.x = Math.round(v.x);
-	out.y = Math.round(v.y);
-	out.z = Math.round(v.z);
-	return out;
+	return set(out, Math.round(v.x), Math.round(v.y), Math.round(v.z));
 }
 
 /**
@@ -287,10 +256,12 @@ export function clamp(
 ): Vector3 {
 	const minIsNum = typeof min === "number";
 	const maxIsNum = typeof max === "number";
-	out.x = clampNumber(v.x, minIsNum ? min : min.x, maxIsNum ? max : max.x);
-	out.y = clampNumber(v.y, minIsNum ? min : min.y, maxIsNum ? max : max.y);
-	out.z = clampNumber(v.z, minIsNum ? min : min.z, maxIsNum ? max : max.z);
-	return out;
+	return set(
+		out,
+		clampNumber(v.x, minIsNum ? min : min.x, maxIsNum ? max : max.x),
+		clampNumber(v.y, minIsNum ? min : min.y, maxIsNum ? max : max.y),
+		clampNumber(v.z, minIsNum ? min : min.z, maxIsNum ? max : max.z),
+	);
 }
 
 /**
@@ -302,10 +273,7 @@ export function clamp(
  * @returns The mutated `out`.
  */
 export function lerp(out: Vector3, v1: Vector3, v2: Vector3, t: number): Vector3 {
-	out.x = v1.x + (v2.x - v1.x) * t;
-	out.y = v1.y + (v2.y - v1.y) * t;
-	out.z = v1.z + (v2.z - v1.z) * t;
-	return out;
+	return set(out, v1.x + (v2.x - v1.x) * t, v1.y + (v2.y - v1.y) * t, v1.z + (v2.z - v1.z) * t);
 }
 
 const scrSlerpScaled1 = create();
@@ -368,12 +336,7 @@ export function slerp(out: Vector3, v1: Vector3, v2: Vector3, t: number): Vector
 export function rotateX(out: Vector3, v: Vector3, radians: number): Vector3 {
 	const c = Math.cos(radians);
 	const s = Math.sin(radians);
-	const y = v.y * c - v.z * s;
-	const z = v.y * s + v.z * c;
-	out.x = v.x;
-	out.y = y;
-	out.z = z;
-	return out;
+	return set(out, v.x, v.y * c - v.z * s, v.y * s + v.z * c);
 }
 
 /**
@@ -387,12 +350,7 @@ export function rotateX(out: Vector3, v: Vector3, radians: number): Vector3 {
 export function rotateY(out: Vector3, v: Vector3, radians: number): Vector3 {
 	const c = Math.cos(radians);
 	const s = Math.sin(radians);
-	const x = v.x * c + v.z * s;
-	const z = -v.x * s + v.z * c;
-	out.x = x;
-	out.y = v.y;
-	out.z = z;
-	return out;
+	return set(out, v.x * c + v.z * s, v.y, -v.x * s + v.z * c);
 }
 
 /**
@@ -405,10 +363,5 @@ export function rotateY(out: Vector3, v: Vector3, radians: number): Vector3 {
 export function rotateZ(out: Vector3, v: Vector3, radians: number): Vector3 {
 	const c = Math.cos(radians);
 	const s = Math.sin(radians);
-	const x = v.x * c - v.y * s;
-	const y = v.x * s + v.y * c;
-	out.x = x;
-	out.y = y;
-	out.z = v.z;
-	return out;
+	return set(out, v.x * c - v.y * s, v.x * s + v.y * c, v.z);
 }
