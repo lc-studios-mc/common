@@ -287,6 +287,22 @@ export function setLength(out: Vector3, v: Vector3, newLength: number): Vector3 
 }
 
 /**
+ * Projects a vector onto another vector.
+ * @param out - Vector to write the result to.
+ * @param v - Vector to project.
+ * @param onto - Vector to project onto; it does not need to be normalized. A zero-length vector
+ *   results in a zero vector.
+ * @returns The mutated `out`.
+ */
+export function project(out: Vector3, v: Vector3, onto: Vector3): Vector3 {
+	const denom = lengthSq(onto);
+	if (denom === 0) {
+		return set(out, 0, 0, 0);
+	}
+	return multiplyScalar(out, onto, dot(v, onto) / denom);
+}
+
+/**
  * Rounds each component of a vector down to the nearest integer.
  * @param out - Vector to write the result to.
  * @param v - Vector to round.

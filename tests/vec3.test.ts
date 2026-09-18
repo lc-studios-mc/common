@@ -363,6 +363,46 @@ describe("setLength", () => {
 	});
 });
 
+describe("project", () => {
+	it("projects onto a non-normalized vector", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		Vec3.project(out, { x: 3, y: 4, z: 5 }, { x: 2, y: 0, z: 0 });
+		expect(out).toEqual({ x: 3, y: 0, z: 0 });
+	});
+
+	it("returns a zero vector for perpendicular vectors", () => {
+		const out = { x: 1, y: 1, z: 1 };
+		Vec3.project(out, { x: 0, y: 1, z: 0 }, { x: 1, y: 0, z: 0 });
+		expect(out.x).toBeCloseTo(0);
+		expect(out.y).toBeCloseTo(0);
+		expect(out.z).toBeCloseTo(0);
+	});
+
+	it("flips direction for opposing vectors", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.project(out, { x: 2, y: 0, z: 0 }, { x: -1, y: 0, z: 0 })).toEqual({
+			x: 2,
+			y: -0,
+			z: -0,
+		});
+	});
+
+	it("returns a zero vector when projecting onto a zero vector", () => {
+		const out = { x: 1, y: 2, z: 3 };
+		expect(Vec3.project(out, { x: 1, y: 1, z: 1 }, { x: 0, y: 0, z: 0 })).toEqual({
+			x: 0,
+			y: 0,
+			z: 0,
+		});
+	});
+
+	it("writes the result to and returns out, even if out is v", () => {
+		const v = { x: 3, y: 4, z: 5 };
+		expect(Vec3.project(v, v, { x: 0, y: 1, z: 0 })).toBe(v);
+		expect(v).toEqual({ x: 0, y: 4, z: 0 });
+	});
+});
+
 describe("floor", () => {
 	it("rounds each component down", () => {
 		const out = { x: 0, y: 0, z: 0 };
