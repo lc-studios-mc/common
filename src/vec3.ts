@@ -34,3 +34,31 @@ export const LEFT = WEST;
 export function create(v?: Partial<Vector3>): Vector3 {
 	return { x: v?.x ?? 0, y: v?.y ?? 0, z: v?.z ?? 0 };
 }
+
+/**
+ * Adds two vectors.
+ * @param out - Vector to write the result to.
+ * @param v1 - Vector to add to.
+ * @param v2 - Vector to add. Missing components default to 0.
+ * @returns The mutated `out`.
+ */
+export function add(out: Vector3, v1: Vector3, v2: Partial<Vector3>): Vector3 {
+	out.x = v1.x + (v2.x ?? 0);
+	out.y = v1.y + (v2.y ?? 0);
+	out.z = v1.z + (v2.z ?? 0);
+	return out;
+}
+
+/**
+ * Subtracts one vector from another.
+ * @param out - Vector to write the result to.
+ * @param v1 - Vector to subtract from.
+ * @param v2 - Vector to subtract. Missing components default to 0.
+ * @returns The mutated `out`.
+ */
+export function subtract(out: Vector3, v1: Vector3, v2: Partial<Vector3>): Vector3 {
+	out.x = v1.x - (v2.x ?? 0);
+	out.y = v1.y - (v2.y ?? 0);
+	out.z = v1.z - (v2.z ?? 0);
+	return out;
+}
