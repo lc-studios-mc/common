@@ -125,3 +125,24 @@ describe("divideScalar", () => {
 		expect(result).toBe(out);
 	});
 });
+
+describe("lengthSq", () => {
+	it("returns the squared length of a vector", () => {
+		expect(Vec3.lengthSq({ x: 1, y: 2, z: 2 })).toBe(9);
+	});
+
+	it("returns 0 for the zero vector", () => {
+		expect(Vec3.lengthSq({ x: 0, y: 0, z: 0 })).toBe(0);
+	});
+});
+
+describe("length", () => {
+	it("returns the length of a vector", () => {
+		expect(Vec3.length({ x: 1, y: 2, z: 2 })).toBe(3);
+		expect(Vec3.length({ x: 3, y: 4, z: 0 })).toBe(5);
+	});
+
+	it("returns 0 for the zero vector", () => {
+		expect(Vec3.length({ x: 0, y: 0, z: 0 })).toBe(0);
+	});
+});

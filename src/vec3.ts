@@ -118,3 +118,21 @@ export function divideScalar(out: Vector3, v: Vector3, scalar: number): Vector3 
 	out.z = v.z / scalar;
 	return out;
 }
+
+/**
+ * Calculates the squared length (magnitude) of a vector.
+ * @param v - Vector to measure.
+ * @returns The squared length.
+ */
+export function lengthSq(v: Vector3): number {
+	return v.x * v.x + v.y * v.y + v.z * v.z;
+}
+
+/**
+ * Calculates the length (magnitude) of a vector.
+ * @param v - Vector to measure.
+ * @returns The length.
+ */
+export function length(v: Vector3): number {
+	return Math.sqrt(lengthSq(v));
+}
