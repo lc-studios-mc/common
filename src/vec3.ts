@@ -62,3 +62,59 @@ export function subtract(out: Vector3, v1: Vector3, v2: Partial<Vector3>): Vecto
 	out.z = v1.z - (v2.z ?? 0);
 	return out;
 }
+
+/**
+ * Multiplies two vectors component-wise.
+ * @param out - Vector to write the result to.
+ * @param v1 - Vector to multiply.
+ * @param v2 - Vector to multiply by. Missing components default to 1.
+ * @returns The mutated `out`.
+ */
+export function multiply(out: Vector3, v1: Vector3, v2: Partial<Vector3>): Vector3 {
+	out.x = v1.x * (v2.x ?? 1);
+	out.y = v1.y * (v2.y ?? 1);
+	out.z = v1.z * (v2.z ?? 1);
+	return out;
+}
+
+/**
+ * Multiplies a vector by a scalar.
+ * @param out - Vector to write the result to.
+ * @param v - Vector to multiply.
+ * @param scalar - Scalar to multiply by.
+ * @returns The mutated `out`.
+ */
+export function multiplyScalar(out: Vector3, v: Vector3, scalar: number): Vector3 {
+	out.x = v.x * scalar;
+	out.y = v.y * scalar;
+	out.z = v.z * scalar;
+	return out;
+}
+
+/**
+ * Divides one vector by another component-wise.
+ * @param out - Vector to write the result to.
+ * @param v1 - Vector to divide.
+ * @param v2 - Vector to divide by. Missing components default to 1.
+ * @returns The mutated `out`.
+ */
+export function divide(out: Vector3, v1: Vector3, v2: Partial<Vector3>): Vector3 {
+	out.x = v1.x / (v2.x ?? 1);
+	out.y = v1.y / (v2.y ?? 1);
+	out.z = v1.z / (v2.z ?? 1);
+	return out;
+}
+
+/**
+ * Divides a vector by a scalar.
+ * @param out - Vector to write the result to.
+ * @param v - Vector to divide.
+ * @param scalar - Scalar to divide by.
+ * @returns The mutated `out`.
+ */
+export function divideScalar(out: Vector3, v: Vector3, scalar: number): Vector3 {
+	out.x = v.x / scalar;
+	out.y = v.y / scalar;
+	out.z = v.z / scalar;
+	return out;
+}

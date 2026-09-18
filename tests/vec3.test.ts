@@ -55,3 +55,73 @@ describe("subtract", () => {
 		expect(result).toBe(out);
 	});
 });
+
+describe("multiply", () => {
+	it("multiplies two vectors component-wise", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.multiply(out, { x: 1, y: 2, z: 3 }, { x: 4, y: 5, z: 6 })).toEqual({
+			x: 4,
+			y: 10,
+			z: 18,
+		});
+	});
+
+	it("defaults missing components of v2 to 1", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.multiply(out, { x: 1, y: 2, z: 3 }, { x: 4 })).toEqual({ x: 4, y: 2, z: 3 });
+	});
+
+	it("writes the result to and returns out", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		const result = Vec3.multiply(out, { x: 1, y: 2, z: 3 }, { x: 4, y: 5, z: 6 });
+		expect(result).toBe(out);
+	});
+});
+
+describe("multiplyScalar", () => {
+	it("multiplies a vector by a scalar", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.multiplyScalar(out, { x: 1, y: 2, z: 3 }, 2)).toEqual({ x: 2, y: 4, z: 6 });
+	});
+
+	it("writes the result to and returns out", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		const result = Vec3.multiplyScalar(out, { x: 1, y: 2, z: 3 }, 2);
+		expect(result).toBe(out);
+	});
+});
+
+describe("divide", () => {
+	it("divides one vector by another component-wise", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.divide(out, { x: 4, y: 10, z: 18 }, { x: 4, y: 5, z: 6 })).toEqual({
+			x: 1,
+			y: 2,
+			z: 3,
+		});
+	});
+
+	it("defaults missing components of v2 to 1", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.divide(out, { x: 4, y: 2, z: 3 }, { x: 4 })).toEqual({ x: 1, y: 2, z: 3 });
+	});
+
+	it("writes the result to and returns out", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		const result = Vec3.divide(out, { x: 4, y: 10, z: 18 }, { x: 4, y: 5, z: 6 });
+		expect(result).toBe(out);
+	});
+});
+
+describe("divideScalar", () => {
+	it("divides a vector by a scalar", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.divideScalar(out, { x: 2, y: 4, z: 6 }, 2)).toEqual({ x: 1, y: 2, z: 3 });
+	});
+
+	it("writes the result to and returns out", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		const result = Vec3.divideScalar(out, { x: 2, y: 4, z: 6 }, 2);
+		expect(result).toBe(out);
+	});
+});
