@@ -357,3 +357,58 @@ export function slerp(out: Vector3, v1: Vector3, v2: Vector3, t: number): Vector
 	multiplyScalar(scrSlerpScaled2, v2, t2);
 	return add(out, scrSlerpScaled1, scrSlerpScaled2);
 }
+
+/**
+ * Rotates a vector around the X axis. Positive angles rotate +Y towards +Z.
+ * @param out - Vector to write the result to.
+ * @param v - Vector to rotate.
+ * @param radians - Rotation angle in radians.
+ * @returns The mutated `out`.
+ */
+export function rotateX(out: Vector3, v: Vector3, radians: number): Vector3 {
+	const c = Math.cos(radians);
+	const s = Math.sin(radians);
+	const y = v.y * c - v.z * s;
+	const z = v.y * s + v.z * c;
+	out.x = v.x;
+	out.y = y;
+	out.z = z;
+	return out;
+}
+
+/**
+ * Rotates a vector around the Y axis. Positive angles rotate +Z towards +X (east towards north),
+ * the opposite of Minecraft's yaw; negate a yaw before passing it in.
+ * @param out - Vector to write the result to.
+ * @param v - Vector to rotate.
+ * @param radians - Rotation angle in radians.
+ * @returns The mutated `out`.
+ */
+export function rotateY(out: Vector3, v: Vector3, radians: number): Vector3 {
+	const c = Math.cos(radians);
+	const s = Math.sin(radians);
+	const x = v.x * c + v.z * s;
+	const z = -v.x * s + v.z * c;
+	out.x = x;
+	out.y = v.y;
+	out.z = z;
+	return out;
+}
+
+/**
+ * Rotates a vector around the Z axis. Positive angles rotate +X towards +Y.
+ * @param out - Vector to write the result to.
+ * @param v - Vector to rotate.
+ * @param radians - Rotation angle in radians.
+ * @returns The mutated `out`.
+ */
+export function rotateZ(out: Vector3, v: Vector3, radians: number): Vector3 {
+	const c = Math.cos(radians);
+	const s = Math.sin(radians);
+	const x = v.x * c - v.y * s;
+	const y = v.x * s + v.y * c;
+	out.x = x;
+	out.y = y;
+	out.z = v.z;
+	return out;
+}

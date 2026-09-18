@@ -472,3 +472,64 @@ describe("slerp", () => {
 		expect(a.z).toBeCloseTo(0);
 	});
 });
+
+describe("rotateX", () => {
+	it("rotates +Y towards +Z for positive angles", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		Vec3.rotateX(out, { x: 0, y: 1, z: 0 }, Math.PI / 2);
+		expect(out.x).toBeCloseTo(0);
+		expect(out.y).toBeCloseTo(0);
+		expect(out.z).toBeCloseTo(1);
+	});
+
+	it("leaves the X component unchanged and supports aliasing", () => {
+		const v = { x: 5, y: 0, z: 1 };
+		Vec3.rotateX(v, v, Math.PI);
+		expect(v.x).toBe(5);
+		expect(v.y).toBeCloseTo(0);
+		expect(v.z).toBeCloseTo(-1);
+	});
+});
+
+describe("rotateY", () => {
+	it("rotates +Z towards +X for positive angles", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		Vec3.rotateY(out, { x: 0, y: 0, z: 1 }, Math.PI / 2);
+		expect(out.x).toBeCloseTo(1);
+		expect(out.y).toBeCloseTo(0);
+		expect(out.z).toBeCloseTo(0);
+	});
+
+	it("turns east into north (counterclockwise seen from above)", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		Vec3.rotateY(out, Vec3.EAST, Math.PI / 2);
+		expect(out.x).toBeCloseTo(Vec3.NORTH.x);
+		expect(out.z).toBeCloseTo(Vec3.NORTH.z);
+	});
+
+	it("supports aliasing", () => {
+		const v = { x: 1, y: 2, z: 0 };
+		Vec3.rotateY(v, v, Math.PI);
+		expect(v.x).toBeCloseTo(-1);
+		expect(v.y).toBe(2);
+		expect(v.z).toBeCloseTo(0);
+	});
+});
+
+describe("rotateZ", () => {
+	it("rotates +X towards +Y for positive angles", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		Vec3.rotateZ(out, { x: 1, y: 0, z: 0 }, Math.PI / 2);
+		expect(out.x).toBeCloseTo(0);
+		expect(out.y).toBeCloseTo(1);
+		expect(out.z).toBeCloseTo(0);
+	});
+
+	it("preserves length", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		const v = { x: 1, y: 2, z: 3 };
+		Vec3.rotateZ(out, v, 0.7);
+		expect(Vec3.length(out)).toBeCloseTo(Vec3.length(v));
+		expect(out.z).toBe(3);
+	});
+});
