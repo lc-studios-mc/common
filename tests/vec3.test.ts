@@ -1,6 +1,7 @@
 import type { Vector3 } from "@minecraft/server";
 import { Vec3 } from "@src/index";
 import { describe, expect, it } from "bun:test";
+import { degToRad } from "@src/number";
 
 describe("create", () => {
 	it("creates a vector from the given components", () => {
@@ -563,5 +564,99 @@ describe("rotateZ", () => {
 		Vec3.rotateZ(out, v, 0.7);
 		expect(Vec3.length(out)).toBeCloseTo(Vec3.length(v));
 		expect(out.z).toBe(3);
+	});
+});
+
+describe("resolveLocalOffsets", () => {
+	const origin = { x: 10, y: 20, z: 30 };
+	const resolve = (rotation: { x: number; y: number }, offset: Vector3): Vector3 => {
+		const [out] = Vec3.resolveLocalOffsets([Vec3.create()], origin, rotation, [offset]);
+		return out!;
+	};
+	const expectVec = (v: Vector3, x: number, y: number, z: number) => {
+		expect(v.x).toBeCloseTo(x);
+		expect(v.y).toBeCloseTo(y);
+		expect(v.z).toBeCloseTo(z);
+	};
+
+	it("returns the same out array", () => {
+		const out = [Vec3.create()];
+		expect(Vec3.resolveLocalOffsets(out, origin, { x: 0, y: 0 }, [Vec3.ONE])).toBe(out);
+	});
+
+	it("faces south (+Z) at yaw 0, with right to the west", () => {
+		expectVec(resolve({ x: 0, y: 0 }, { x: 0, y: 0, z: 1 }), 10, 20, 31);
+		expectVec(resolve({ x: 0, y: 0 }, { x: 1, y: 0, z: 0 }), 9, 20, 30);
+		expectVec(resolve({ x: 0, y: 0 }, { x: 0, y: 1, z: 0 }), 10, 21, 30);
+	});
+
+	it("faces west (-X) at yaw 90, with right to the north", () => {
+		expectVec(resolve({ x: 0, y: 90 }, { x: 0, y: 0, z: 1 }), 9, 20, 30);
+		expectVec(resolve({ x: 0, y: 90 }, { x: 1, y: 0, z: 0 }), 10, 20, 29);
+	});
+
+	it("faces north (-Z) at yaw 180, with right to the east", () => {
+		expectVec(resolve({ x: 0, y: 180 }, { x: 0, y: 0, z: 1 }), 10, 20, 29);
+		expectVec(resolve({ x: 0, y: 180 }, { x: 1, y: 0, z: 0 }), 11, 20, 30);
+	});
+
+	it("resolves a combined non-axis-aligned yaw and pitch", () => {
+		// Expected value derived independently: forward from the view direction,
+		// right = cross(forward, up), up = cross(right, forward)
+		expectVec(
+			resolve({ x: 20, y: 30 }, { x: 1, y: 2, z: 3 }),
+			7.38241552,
+			20.85332481,
+			32.53378931,
+		);
+	});
+
+	it("looks down at positive pitch", () => {
+		expectVec(resolve({ x: 90, y: 0 }, { x: 0, y: 0, z: 1 }), 10, 19, 30);
+		// Up tilts back towards the player
+		expectVec(resolve({ x: 90, y: 0 }, { x: 0, y: 1, z: 0 }), 10, 20, 31);
+	});
+
+	it("matches the view direction for forward offsets", () => {
+		const r = { x: 30, y: 45 };
+		const p = degToRad(r.x);
+		const y = degToRad(r.y);
+		const view = {
+			x: -Math.cos(p) * Math.sin(y),
+			y: -Math.sin(p),
+			z: Math.cos(p) * Math.cos(y),
+		};
+		expectVec(
+			resolve(r, { x: 0, y: 0, z: 3 }),
+			10 + view.x * 3,
+			20 + view.y * 3,
+			30 + view.z * 3,
+		);
+	});
+
+	it("resolves multiple offsets and preserves their lengths", () => {
+		const offsets = [
+			{ x: 1, y: 2, z: 3 },
+			{ x: -4, y: 0, z: 1 },
+		];
+		const out = [Vec3.create(), Vec3.create()];
+		Vec3.resolveLocalOffsets(out, origin, { x: 20, y: 70 }, offsets);
+		for (let i = 0; i < offsets.length; i++) {
+			expect(Vec3.distance(out[i]!, origin)).toBeCloseTo(Vec3.length(offsets[i]!));
+		}
+	});
+
+	it("forms a left-handed right/up/forward frame (cross(right, up) = -forward)", () => {
+		const right = resolve({ x: 25, y: 130 }, { x: 1, y: 0, z: 0 });
+		const up = resolve({ x: 25, y: 130 }, { x: 0, y: 1, z: 0 });
+		const forward = resolve({ x: 25, y: 130 }, { x: 0, y: 0, z: 1 });
+		const r = Vec3.subtract(Vec3.create(), right, origin);
+		const u = Vec3.subtract(Vec3.create(), up, origin);
+		const f = Vec3.subtract(Vec3.create(), forward, origin);
+		expect(Vec3.dot(Vec3.cross(Vec3.create(), r, u), f)).toBeCloseTo(-1);
+	});
+
+	it("throws if out has fewer entries than localOffsets", () => {
+		expect(() => Vec3.resolveLocalOffsets([], origin, { x: 0, y: 0 }, [Vec3.ONE])).toThrow();
 	});
 });

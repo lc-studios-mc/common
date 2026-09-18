@@ -1,5 +1,5 @@
-import { Vector3 } from "@minecraft/server";
-import { clamp as clampNumber } from "./number";
+import { Vector2, Vector3 } from "@minecraft/server";
+import { clamp as clampNumber, degToRad } from "./number";
 
 export const ZERO = { x: 0, y: 0, z: 0 } as const satisfies Vector3;
 
@@ -384,4 +384,58 @@ export function rotateZ(out: Vector3, v: Vector3, radians: number): Vector3 {
 	const c = Math.cos(radians);
 	const s = Math.sin(radians);
 	return set(out, v.x * c - v.y * s, v.x * s + v.y * c, v.z);
+}
+
+/**
+ * Converts local right/up/forward offsets into world-space points.
+ * @param out - Vectors to write to; must be at least as long as `localOffsets`.
+ * @param origin - World-space origin.
+ * @param rotation - Pitch (`x`) and yaw (`y`) in degrees using Minecraft's convention (yaw 0 faces +Z,
+ *   positive pitch looks down), e.g. from `entity.getRotation()`.
+ * @param localOffsets - Local-space offsets (x=right, y=up, z=forward).
+ * @returns The mutated `out`.
+ * @throws If `out` or `localOffsets` has no entry at some index.
+ */
+export function resolveLocalOffsets<T extends Vector3[]>(
+	out: T,
+	origin: Vector3,
+	rotation: Vector2,
+	localOffsets: readonly Vector3[],
+): T {
+	const pitch = degToRad(rotation.x);
+	const yaw = degToRad(rotation.y);
+
+	const sinP = Math.sin(pitch);
+	const cosP = Math.cos(pitch);
+	const sinY = Math.sin(yaw);
+	const cosY = Math.cos(yaw);
+
+	// Basis vectors of the local frame in world space. With forward as +Z, cross(right, up) is
+	// -forward, so right can't be a rotation of +X: it is negated to point at the entity's right.
+	// Forward: yaw 0 faces +Z, and positive pitch looks down (-Y)
+	const fx = -cosP * sinY;
+	const fy = -sinP;
+	const fz = cosP * cosY;
+	// Right: always horizontal
+	const rx = -cosY;
+	const rz = -sinY;
+	// Up: forward pitched a further 90° up, so it tilts back towards the entity when looking down
+	const ux = -sinP * sinY;
+	const uy = cosP;
+	const uz = sinP * cosY;
+
+	for (let i = 0; i < localOffsets.length; i++) {
+		const v = localOffsets[i];
+		const o = out[i];
+		if (!v || !o) throw new Error(`Missing vector at index ${i}`);
+		// origin + right * v.x + up * v.y + forward * v.z (right has no y component)
+		set(
+			o,
+			origin.x + rx * v.x + ux * v.y + fx * v.z,
+			origin.y + uy * v.y + fy * v.z,
+			origin.z + rz * v.x + uz * v.y + fz * v.z,
+		);
+	}
+
+	return out;
 }
