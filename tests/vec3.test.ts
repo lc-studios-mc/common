@@ -174,6 +174,51 @@ describe("distance", () => {
 	});
 });
 
+describe("dot", () => {
+	it("returns the dot product of two vectors", () => {
+		expect(Vec3.dot({ x: 1, y: 2, z: 3 }, { x: 4, y: -5, z: 6 })).toBe(12);
+	});
+
+	it("returns 0 for perpendicular vectors", () => {
+		expect(Vec3.dot({ x: 1, y: 0, z: 0 }, { x: 0, y: 1, z: 0 })).toBe(0);
+	});
+});
+
+describe("cross", () => {
+	it("returns the cross product of two vectors", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.cross(out, { x: 1, y: 0, z: 0 }, { x: 0, y: 1, z: 0 })).toEqual({
+			x: 0,
+			y: 0,
+			z: 1,
+		});
+		expect(Vec3.cross(out, { x: 1, y: 2, z: 3 }, { x: 4, y: 5, z: 6 })).toEqual({
+			x: -3,
+			y: 6,
+			z: -3,
+		});
+	});
+
+	it("is anti-commutative", () => {
+		const a = { x: 1, y: 2, z: 3 };
+		const b = { x: 4, y: 5, z: 6 };
+		const ab = Vec3.cross({ x: 0, y: 0, z: 0 }, a, b);
+		const ba = Vec3.cross({ x: 0, y: 0, z: 0 }, b, a);
+		expect(ab).toEqual({ x: -ba.x, y: -ba.y, z: -ba.z });
+	});
+
+	it("works when out is the same object as an input", () => {
+		const v1 = { x: 1, y: 2, z: 3 };
+		expect(Vec3.cross(v1, v1, { x: 4, y: 5, z: 6 })).toEqual({ x: -3, y: 6, z: -3 });
+	});
+
+	it("writes the result to and returns out", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		const result = Vec3.cross(out, { x: 1, y: 0, z: 0 }, { x: 0, y: 1, z: 0 });
+		expect(result).toBe(out);
+	});
+});
+
 describe("normalize", () => {
 	it("scales a vector to a length of 1", () => {
 		const out = { x: 0, y: 0, z: 0 };

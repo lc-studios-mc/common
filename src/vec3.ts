@@ -161,6 +161,33 @@ export function distance(v1: Vector3, v2: Vector3): number {
 }
 
 /**
+ * Calculates the dot product of two vectors.
+ * @param v1 - First vector.
+ * @param v2 - Second vector.
+ * @returns The dot product.
+ */
+export function dot(v1: Vector3, v2: Vector3): number {
+	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+}
+
+/**
+ * Calculates the cross product of two vectors.
+ * @param out - Vector to write the result to.
+ * @param v1 - First vector.
+ * @param v2 - Second vector.
+ * @returns The mutated `out`.
+ */
+export function cross(out: Vector3, v1: Vector3, v2: Vector3): Vector3 {
+	const x = v1.y * v2.z - v1.z * v2.y;
+	const y = v1.z * v2.x - v1.x * v2.z;
+	const z = v1.x * v2.y - v1.y * v2.x;
+	out.x = x;
+	out.y = y;
+	out.z = z;
+	return out;
+}
+
+/**
  * Normalizes a vector to a length of 1.
  * @param out - Vector to write the result to.
  * @param v - Vector to normalize. A zero-length vector results in a zero vector.
