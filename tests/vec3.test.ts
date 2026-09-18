@@ -140,6 +140,19 @@ describe("divideScalar", () => {
 	});
 });
 
+describe("negate", () => {
+	it("flips the sign of each component", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		expect(Vec3.negate(out, { x: 1, y: -2, z: 3 })).toEqual({ x: -1, y: 2, z: -3 });
+	});
+
+	it("writes the result to and returns out", () => {
+		const out = { x: 0, y: 0, z: 0 };
+		const result = Vec3.negate(out, { x: 1, y: 2, z: 3 });
+		expect(result).toBe(out);
+	});
+});
+
 describe("lengthSq", () => {
 	it("returns the squared length of a vector", () => {
 		expect(Vec3.lengthSq({ x: 1, y: 2, z: 2 })).toBe(9);

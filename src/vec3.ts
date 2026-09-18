@@ -118,6 +118,16 @@ export function divideScalar(out: Vector3, v: Vector3, scalar: number): Vector3 
 }
 
 /**
+ * Negates a vector, flipping its direction.
+ * @param out - Vector to write the result to.
+ * @param v - Vector to negate.
+ * @returns The mutated `out`.
+ */
+export function negate(out: Vector3, v: Vector3): Vector3 {
+	return set(out, -v.x, -v.y, -v.z);
+}
+
+/**
  * Calculates the squared length (magnitude) of a vector.
  * @param v - Vector to measure.
  * @returns The squared length.
