@@ -14,6 +14,9 @@ Utilities for Minecraft Bedrock scripting with `@minecraft/server` API.
 
 - `src/`: Source files
 - `tests/`: Test files (use `bun:test`)
+- `tests/preload.ts`: mocks the `@minecraft/server` module for tests, since the
+  package ships types only; extend it when `src/` uses new runtime values from
+  it
 
 ## Commands
 
